@@ -14,14 +14,6 @@ class SimpleLinearRegression:
     y: variável independente, a ser predita
     """
 
-    def best_line(self, w, b):
-        self.w = w
-        self.b = b
-        def line(self, x):
-            self.x = x
-            return w * x + b
-        return line
-
     def linear_regression(self, x, y):
         self.x = np.array(x)
         self.y = np.array(y)
@@ -52,6 +44,14 @@ class SimpleLinearRegression:
     def predict(self, x):
         return self.line(x)
     
+    def best_line(self, w, b):
+        self.w = w
+        self.b = b
+        def line(self, x):
+            self.x = x
+            return w * x + b
+        return line
+    
     def RMSE(self, x, y):
         # Root Mean Squared Error
         # uma espécie de desvio padrão
@@ -64,3 +64,62 @@ class SimpleLinearRegression:
         sns.lineplot(x=t, y=ft, color='red')
         plt.savefig(name)
         plt.show()
+
+class SimpleLinearRegressionWithGradientDescendent:
+    
+    def __init__(self, alpha=0.01, iter=200, w=0, b=0):
+        self.alpha = alpha
+        self.iter = iter
+        self.w = w
+        self.b = b
+
+    def fit(self, X, y):
+        alpha = self.alpha
+        n = X.shape[0]
+        for _ in range(self.iter):
+            px = self.w * X + self.b # é o (p(x1), p(x2), ..., p(xn))
+            dw = np.dot(X, px - y) / n
+            db = np.sum(px - y) / n
+            # gradiente descendente
+            self.w -= alpha * dw
+            self.b -= alpha * db
+
+    def predict(self, x):
+        return self.w * x + self.b
+    
+    def best_line(self, w, b):
+        self.w = w
+        self.b = b
+        def line(self, x):
+            self.x = x
+            return w * x + b
+        return line
+
+class LinearRegressionWithGradientDescendent:
+
+    def __init__(self, alpha=0.01, iter=200):
+        self.alpha = alpha # learning rate
+        self.iter = iter # número de iterações
+        self.w = None
+        self.b = None
+
+    def fit(self, X, y):
+        n, m = X.shape
+        if self.w is None:
+            self.w = np.zeros(m)
+        if self.b is None:
+            self.b = 0
+
+        for _ in range(self.iter):
+            # y_hat = (p(x1), p(x2), ..., p(xm))
+            y_hat = (self.w @ X.T) + self.b
+            Y = y_hat - y
+            # todas as derivadas parciais dJ/dwi
+            dw = (Y @ X) / n # Y @ X multiplica Y pelas colunas de X
+            # a derivada parcial dJ/db
+            db = np.sum(Y) / n
+            self.w -= self.alpha * dw
+            self.b -= self.alpha * db
+
+    def predict(self, x):
+        return self.w @ x.T + self.b
