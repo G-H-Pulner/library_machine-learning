@@ -3,7 +3,7 @@ import seaborn as sns
 import numpy as np
 import random
 
-class LinearRegression:
+class SimpleLinearRegression:
     """
     Versão cálculo 1: usando máximos e mínimos
 
@@ -44,10 +44,10 @@ class LinearRegression:
     def fit(self, x, y):
         self.x = x
         self.y = y
-        w, b = LinearRegression.linear_regression(x, y)
+        w, b = SimpleLinearRegression.linear_regression(x, y)
         self.w = w
         self.b = b
-        self.line = LinearRegression.best_line(w, b)
+        self.line = SimpleLinearRegression.best_line(w, b)
 
     def predict(self, x):
         return self.line(x)
