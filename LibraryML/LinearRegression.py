@@ -98,6 +98,10 @@ class multiple_regression:
         self.b = None
 
     def fit(self, X, y):
+        X = np.array(X)
+        y = np.array(y)
+        self.X = X
+        self.y = y
         n, m = X.shape
         if self.w is None:
             self.w = np.zeros(m)
